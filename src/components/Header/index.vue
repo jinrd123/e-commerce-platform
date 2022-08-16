@@ -50,7 +50,7 @@
 export default {
     name:'Header',
     methods:{
-        goSearch() {
+        async goSearch() {
             this.$router.push('/search');
         }
     }
