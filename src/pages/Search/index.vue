@@ -1,5 +1,5 @@
 <template>
-    <div>搜索组件</div>
+    <TypeNav/>
 </template>
 
 <script>
