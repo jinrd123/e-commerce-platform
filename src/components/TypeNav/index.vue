@@ -84,8 +84,6 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("categoryList");
-    console.log(this.$route.path);
     if (this.$route.path !== "/home") {
       this.show = false;
     }
