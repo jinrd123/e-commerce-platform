@@ -1,5 +1,5 @@
 <template>
-    <TypeNav/>
+    <TypeNav></TypeNav>
 </template>
 
 <script>

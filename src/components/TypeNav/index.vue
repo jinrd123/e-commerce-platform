@@ -3,41 +3,60 @@
   <div class="type-nav">
     <div class="container">
       <!-- 事件委派 -->
-      <div @mouseleave="leaveIndex">
+      <div @mouseleave="leaveIndex" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort">
-          <div class="all-sort-list2" @click="goSearch($event)">
-            <div
-              class="item"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-              :class="{ cur: index === currentIndex }"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <a :data-categoryName="c1.categoryName" :data-category1id="c1.categoryId">{{ c1.categoryName }}</a>
-                <!-- <router-link to="/search">{{c1.categoryName}}</router-link> -->
-              </h3>
-              <div class="item-list clearfix" :style="{display:index===currentIndex?'block':'none'}">
+        <transition name="sort">
+          <div class="sort" v-show="show">
+            <div class="all-sort-list2" @click="goSearch($event)">
+              <div
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                :class="{ cur: index === currentIndex }"
+              >
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    :data-categoryName="c1.categoryName"
+                    :data-category1id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                  <!-- <router-link to="/search">{{c1.categoryName}}</router-link> -->
+                </h3>
                 <div
-                  class="subitem"
-                  v-for="c2 in c1.categoryChild"
-                  :key="c2.categoryId"
+                  class="item-list clearfix"
+                  :style="{
+                    display: index === currentIndex ? 'block' : 'none',
+                  }"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a :data-categoryName="c2.categoryName" :data-category2id="c2.categoryId">{{ c2.categoryName }}</a>
-                    </dt>
-                    <dd>
-                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                        <a :data-categoryName="c3.categoryName" :data-category3id="c3.categoryId">{{ c3.categoryName }}</a>
-                      </em>
-                    </dd>
-                  </dl>
+                  <div
+                    class="subitem"
+                    v-for="c2 in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
+                        <a
+                          :data-categoryName="c2.categoryName"
+                          :data-category2id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
+                        >
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            :data-categoryName="c3.categoryName"
+                            :data-category3id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -55,16 +74,21 @@
 
 <script>
 import { mapState } from "vuex";
-import throttle from 'lodash/throttle.js';
+import throttle from "lodash/throttle.js";
 export default {
   name: "TypeNav",
   data() {
     return {
       currentIndex: -1,
+      show: true,
     };
   },
   mounted() {
     this.$store.dispatch("categoryList");
+    console.log(this.$route.path);
+    if (this.$route.path !== "/home") {
+      this.show = false;
+    }
   },
   computed: {
     ...mapState({
@@ -74,29 +98,38 @@ export default {
     }),
   },
   methods: {
-    changeIndex:throttle(function(index){
+    changeIndex: throttle(function (index) {
       this.currentIndex = index;
-    },50),
+    }, 50),
     leaveIndex() {
       this.currentIndex = -1;
+      if (this.$route.path !== "/home") {
+        this.show = false;
+      }
     },
     goSearch(event) {
       let element = event.target;
-      let {categoryname,category1id,category2id,category3id} = element.dataset;
-      if(categoryname) {
-        let location = {name:"search"};
-        let query = {categoryname:categoryname};
-        if(category1id) {
+      let { categoryname, category1id, category2id, category3id } =
+        element.dataset;
+      if (categoryname) {
+        let location = { name: "search" };
+        let query = { categoryname: categoryname };
+        if (category1id) {
           query.category1id = category1id;
-        }else if(category2id) {
+        } else if (category2id) {
           query.category2id = category2id;
-        }else {
+        } else {
           query.category3id = category3id;
         }
         location.query = query;
         this.$router.push(location);
       }
-    }
+    },
+    enterShow() {
+      if (this.$route.path !== "/home") {
+        this.show = true;
+      }
+    },
   },
 };
 </script>
@@ -222,6 +255,15 @@ export default {
           background: skyblue;
         }
       }
+    }
+    .sort-enter {
+      height: 0px;
+    }
+    .sort-enter-to {
+      height: 461px;
+    }
+    .sort-enter-active {
+      transition: all 0.5s linear;
     }
   }
 }
