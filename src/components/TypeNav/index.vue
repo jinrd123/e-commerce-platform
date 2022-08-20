@@ -120,6 +120,7 @@ export default {
           query.category3id = category3id;
         }
         location.query = query;
+        location.params = this.$route.params;
         this.$router.push(location);
       }
     },
