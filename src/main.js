@@ -8,6 +8,8 @@ import axios from 'axios';
 import TypeNav from '@/components/TypeNav';
 
 import store from '@/store';
+
+import "@/mock/mockServe.js";
 Vue.component(TypeNav.name,TypeNav);
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false

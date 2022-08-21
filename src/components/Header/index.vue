@@ -61,16 +61,12 @@ export default {
   },
   methods: {
     goSearch() {
-        if(this.$route.params){console.log("hhh")};
-      if (this.$route.query) {
-          console.log("有");
-        let location = {
-          name: "search",
-          params: { keyword: this.keyword || undefined },
-        };
-        location.query = this.$route.query;
-        this.$router.push(location);
-      }
+      let location = {
+        name: "search",
+        params: { keyword: this.keyword || undefined },
+      };
+      location.query = this.$route.query;
+      this.$router.push(location);
     },
   },
 };
