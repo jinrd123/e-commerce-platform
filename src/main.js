@@ -8,8 +8,10 @@ import axios from 'axios';
 import TypeNav from '@/components/TypeNav';
 
 import store from '@/store';
-
+//执行mock文件，创建虚拟接口
 import "@/mock/mockServe.js";
+//引入轮播图样式
+import "swiper/css/swiper.css"
 Vue.component(TypeNav.name,TypeNav);
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
