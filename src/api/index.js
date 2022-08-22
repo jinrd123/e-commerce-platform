@@ -12,3 +12,6 @@ export const reqCategoryList = () => requests({
 
 //请求mock轮播图数据的函数
 export const reqGetBannerList = () => mockRequest.get('/banner');
+
+//请求Floor组件数据的函数
+export const reqGetFloorList = () => mockRequest.get('/floor');
