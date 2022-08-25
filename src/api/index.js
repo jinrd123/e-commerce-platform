@@ -23,3 +23,9 @@ export const reqGetSearchInfo = (params) => requests({
     method:"post",
     data:params,
 })
+//自己备份一个mockRequest请求mock的search组件的数据
+export const reqGetSearchInfo_mock = (params) => mockRequest({
+    url:"/list",
+    method:"post",
+    data:params,
+})
