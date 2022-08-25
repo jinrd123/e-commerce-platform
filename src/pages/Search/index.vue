@@ -154,18 +154,23 @@ export default {
       },
     };
   },
-  beforeMount() {
-    Object.assign(this.searchParams, this.$route.query, this.$route.params);
-  },
-  mounted() {
-    this.getData();
-  },
   computed: {
     ...mapGetters(["goodsList"]),
   },
   methods: {
     getData() {
       this.$store.dispatch("getSearchList", this.searchParams);
+    },
+  },
+  watch: {
+    $route(newValue, oldValue) {
+      //检测到$route发生变化，我们要重新发送数据请求，第一件事就是构造请求的参数
+      Object.assign(this.searchParams, this.$route.query, this.$route.params);
+      this.getData();
+      //因为三级联动的点击参数category1id、category2id、category3id三者每次只能有一个，不能因为这一次请求给this.searchParams添加了其中一个，然后一直携带到以后的请求，所以每次请求完毕后重置categoryId为空
+      this.searchParams.category1Id = "";
+      this.searchParams.category2Id = "";
+      this.searchParams.category3Id = "";
     },
   },
 };
