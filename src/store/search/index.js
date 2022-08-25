@@ -15,7 +15,18 @@ const actions = {
         }
     }
 };
-const getters = {};
+const getters = {
+    goodsList(state) {
+        //searchList如果为空对象，goodList就是undefined，不能进行遍历，所以要保证goodsList至少是一个空数组
+        return state.searchList.goodsList||[];
+    },
+    trademarkList(state) {
+        return state.searchList.trademarkList;
+    },
+    attrsList(state) {
+        return state.searchList.attrsList;
+    }
+};
 
 export default {
     state,

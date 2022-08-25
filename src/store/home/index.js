@@ -41,7 +41,11 @@ const actions = {
         }
     }
 };
-const getters = {};
+const getters = {
+    categoryList(state) {
+        return state.categoryList;
+    }
+};
 
 export default {
     state,
