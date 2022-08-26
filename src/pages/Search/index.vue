@@ -11,10 +11,10 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-show="searchParams.categoryname">
+              {{ searchParams.categoryname
+              }}<i @click="removeCategoryName">×</i>
+            </li>
           </ul>
         </div>
 
@@ -135,10 +135,10 @@ export default {
     return {
       searchParams: {
         //三级联动点击参数
-        category1Id: "",
-        category2Id: "",
-        category3Id: "",
-        categoryName: "",
+        category1id: "",
+        category2id: "",
+        category3id: "",
+        categoryname: "",
         //搜索参数
         keyword: "",
         //排序功能相关参数
@@ -161,16 +161,26 @@ export default {
     getData() {
       this.$store.dispatch("getSearchList", this.searchParams);
     },
+    removeCategoryName() {
+      this.searchParams.categoryname = undefined;
+      this.searchParams.category1id = undefined;
+      this.searchParams.category2id = undefined;
+      this.searchParams.category3id = undefined;
+      this.$router.push({ name: "search", params: this.$route.params });
+    },
   },
   watch: {
-    $route(newValue, oldValue) {
-      //检测到$route发生变化，我们要重新发送数据请求，第一件事就是构造请求的参数
-      Object.assign(this.searchParams, this.$route.query, this.$route.params);
-      this.getData();
-      //因为三级联动的点击参数category1id、category2id、category3id三者每次只能有一个，不能因为这一次请求给this.searchParams添加了其中一个，然后一直携带到以后的请求，所以每次请求完毕后重置categoryId为空
-      this.searchParams.category1Id = "";
-      this.searchParams.category2Id = "";
-      this.searchParams.category3Id = "";
+    $route: {
+      handler(newValue, oldValue) {
+        //检测到$route发生变化，我们要重新发送数据请求，第一件事就是构造请求的参数
+        Object.assign(this.searchParams, this.$route.query, this.$route.params);
+        this.getData();
+        //因为三级联动的点击参数category1id、category2id、category3id三者每次只能有一个，不能因为这一次请求给this.searchParams添加了其中一个，然后一直携带到以后的请求，所以每次请求完毕后重置categoryId为空
+        this.searchParams.category1id = "";
+        this.searchParams.category2id = "";
+        this.searchParams.category3id = "";
+      },
+      immediate: true,
     },
   },
 };

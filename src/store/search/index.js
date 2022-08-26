@@ -1,4 +1,4 @@
-import { reqGetSearchInfo, } from "@/api";
+import { reqGetSearchInfo,reqGetSearchInfo_mock } from "@/api";
 const state = { 
     searchList: {}, 
 };
