@@ -12,8 +12,8 @@ import store from '@/store';
 import "@/mock/mockServe.js";
 //引入轮播图样式
 import "swiper/css/swiper.css"
-Vue.component(TypeNav.name,TypeNav);
-Vue.component(Carousel.name,Carousel);
+Vue.component(TypeNav.name, TypeNav);
+Vue.component(Carousel.name, Carousel);
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 // //测试请求是否发送成功
@@ -22,5 +22,8 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  beforeMount() {
+    Vue.prototype.$bus = this;
+  },
   render: h => h(App),
 }).$mount('#app')
