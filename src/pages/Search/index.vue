@@ -18,11 +18,14 @@
             <li class="with-x" v-show="searchParams.keyword">
               {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
             </li>
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1] }}<i @click="removeTradeMark">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -177,6 +180,16 @@ export default {
       //同时清除搜索框(全局事件总线)
       this.$bus.$emit("clear");
     },
+    //删除品牌信息
+    removeTradeMark() {
+      this.searchParams.trademark = undefined;
+      this.getData();
+    },
+    trademarkInfo(tradeMark) {
+      //获得tradeMark品牌信息之后：整理参数重新请求数据
+      this.searchParams.trademark = `${tradeMark.tmId}:${tradeMark.tmName}`;
+      this.getData();
+    }
   },
   watch: {
     $route: {
