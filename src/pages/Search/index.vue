@@ -21,11 +21,15 @@
             <li class="with-x" v-if="searchParams.trademark">
               {{ searchParams.trademark.split(":")[1] }}<i @click="removeTradeMark">×</i>
             </li>
+            <!-- 关于属性的面包屑 -->
+            <li class="with-x" v-for="(prop, index) in searchParams.props" :key="index">
+              {{ prop.split(":")[1] }}<i @click="removeProp(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @trademarkInfo="trademarkInfo"/>
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -160,6 +164,8 @@ export default {
       },
     };
   },
+  mounted() {
+  },
   computed: {
     ...mapGetters(["goodsList"]),
   },
@@ -188,6 +194,20 @@ export default {
     trademarkInfo(tradeMark) {
       //获得tradeMark品牌信息之后：整理参数重新请求数据
       this.searchParams.trademark = `${tradeMark.tmId}:${tradeMark.tmName}`;
+      this.getData();
+    },
+    attrInfo(attrParams) {
+      //防止用户重复点击同一个属性值时一直向数组添加相同参数，所以要进行判定，防止重复添加相同元素
+      if(this.searchParams.props.indexOf(attrParams) === -1) {
+        this.searchParams.props.push(attrParams);
+      }
+      //props数组更新之后即可重新发送请求
+      this.getData();
+    },
+    //删除props数组中下标为index的属性项
+    removeProp(index) {
+      this.searchParams.props.splice(index,1);
+      //props数组信息被删除，同样要重新发送请求
       this.getData();
     }
   },

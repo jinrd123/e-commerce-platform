@@ -39,7 +39,7 @@ export default new VueRouter({
             component: Home,
             meta:{
                 show:true,
-            }
+            },
         },
         {
             name:'search',

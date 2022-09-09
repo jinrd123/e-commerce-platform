@@ -18,7 +18,7 @@
       <div class="fl key">{{ attr.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue, index) in attr.attrValueList" :key="index">
+          <li v-for="(attrValue, index) in attr.attrValueList" :key="index" @click="attrInfo(attrValue,attr)">
             <a>{{ attrValue }}</a>
           </li>
         </ul>
@@ -39,6 +39,11 @@ export default {
     //目标效果：点击品牌之后增加tradeMark参数重新发请求，所以这里把点击的品牌信息传给父组件
     tradeMarkHandler(tradeMark) {
       this.$emit("trademarkInfo",tradeMark);
+    },
+    attrInfo(attrValue, attr) {
+      //通过自定义事件把请求要求格式的参数传递给父组件
+      let params = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+      this.$emit("attrInfo", params);
     }
   }
 };
