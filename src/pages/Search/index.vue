@@ -19,40 +19,53 @@
               {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
             </li>
             <li class="with-x" v-if="searchParams.trademark">
-              {{ searchParams.trademark.split(":")[1] }}<i @click="removeTradeMark">×</i>
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTradeMark">×</i>
             </li>
             <!-- 关于属性的面包屑 -->
-            <li class="with-x" v-for="(prop, index) in searchParams.props" :key="index">
+            <li
+              class="with-x"
+              v-for="(prop, index) in searchParams.props"
+              :key="index"
+            >
               {{ prop.split(":")[1] }}<i @click="removeProp(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo" />
 
-        <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
+              <!-- 排序选项 -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 这里如果写<li :class="{active:searchParams.order.split(":")[0]===1}">就会报错，原因是双引号配对出现歧义，把内部的双引号改成单引号即可 -->
+                <!-- <li :class="{active:searchParams.order.split(':')[0]==='1'}">这样正确，但我们把它的逻辑判断封装成一个计算属性isOne -->
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
+                  <a
+                    >综合<span
+                      v-show="isOne"
+                      class="iconfont"
+                      :class="{
+                        'icon-arrowup': isAsc,
+                        'icon-arrowdown': isDesc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
+                  <a
+                    >价格<span
+                      v-show="isTwo"
+                      class="iconfont"
+                      :class="{
+                        'icon-arrowup': isAsc,
+                        'icon-arrowdown': isDesc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -151,8 +164,8 @@ export default {
         categoryname: "",
         //搜索参数
         keyword: "",
-        //排序功能相关参数
-        order: "",
+        //排序功能相关参数，1代表综合，2代表价格；desc代表降序，asc代表升序
+        order: "1:desc",
         //分页器当前页数
         pageNo: 1,
         //每页呈现几个产品
@@ -164,10 +177,21 @@ export default {
       },
     };
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     ...mapGetters(["goodsList"]),
+    isOne() {
+      return this.searchParams.order.indexOf("1") !== -1;
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf("2") !== -1;
+    },
+    isAsc() {
+      return this.searchParams.order.indexOf("asc") !== -1;
+    },
+    isDesc() {
+      return this.searchParams.order.indexOf("desc") !== -1;
+    },
   },
   methods: {
     getData() {
@@ -198,7 +222,7 @@ export default {
     },
     attrInfo(attrParams) {
       //防止用户重复点击同一个属性值时一直向数组添加相同参数，所以要进行判定，防止重复添加相同元素
-      if(this.searchParams.props.indexOf(attrParams) === -1) {
+      if (this.searchParams.props.indexOf(attrParams) === -1) {
         this.searchParams.props.push(attrParams);
       }
       //props数组更新之后即可重新发送请求
@@ -206,10 +230,25 @@ export default {
     },
     //删除props数组中下标为index的属性项
     removeProp(index) {
-      this.searchParams.props.splice(index,1);
+      this.searchParams.props.splice(index, 1);
       //props数组信息被删除，同样要重新发送请求
       this.getData();
-    }
+    },
+    //选择新按钮时默认为降序，连续点击排序按钮之后切换升序和降序，flag值为1、2，分别代表综合、价格
+    changeOrder(flag) {
+      let originFlag = this.searchParams.order.split(":")[0];
+      let originSort = this.searchParams.order.split(":")[1];
+      //连续点击同一个按钮，flag不变，更换升降序
+      if (flag === originFlag) {
+        this.searchParams.order = `${flag}:${
+          originSort === "desc" ? "asc" : "desc"
+        }`;
+      } else {
+        //点击不同按钮，更换flag
+        this.searchParams.order = `${flag}:${originSort}`;
+      }
+      this.getData();
+    },
   },
   watch: {
     $route: {
