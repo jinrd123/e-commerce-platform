@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import TypeNav from '@/components/TypeNav';
 import Carousel from '@/components/Carousel';
+import Pagination from '@/components/Pagination';
 import store from '@/store';
 //执行mock文件，创建虚拟接口
 import "@/mock/mockServe.js";
@@ -14,6 +15,7 @@ import "@/mock/mockServe.js";
 import "swiper/css/swiper.css"
 Vue.component(TypeNav.name, TypeNav);
 Vue.component(Carousel.name, Carousel);
+Vue.component(Pagination.name,Pagination);
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 // //测试请求是否发送成功
