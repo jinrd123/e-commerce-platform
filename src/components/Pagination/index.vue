@@ -1,26 +1,60 @@
 <template>
     <div class="pagination">
         <button>上一页</button>
-        <button>1</button>
-        <button>···</button>
+        <button v-show="startNumAndEndNum.start>1">1</button>
+        <button v-show="startNumAndEndNum.start>2">···</button>
 
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-        <button>6</button>
-        <button>7</button>
+        <!-- 分页器中间部分 -->
+        <!-- 中间部分稳定呈现，上部分“1”和“...”和下部分的“...”和“totalPage”根据情况隐藏 -->
+        <button v-for="(page,index) in startNumAndEndNum.end" :key="index" v-if="page>=startNumAndEndNum.start">{{page}}</button>
 
-        <button>···</button>
-        <button>9</button>
-        <button>上一页</button>
 
-        <button style="margin-left: 30px">共 60 条</button>
+        <button v-show="startNumAndEndNum.end<totalPage-1">···</button>
+        <button v-show="startNumAndEndNum.end<totalPage">{{totalPage}}</button>
+        <button>下一页</button>
+
+        <button style="margin-left: 30px">共 {{totalPage}} 条</button>
+        <div>{{startNumAndEndNum}}</div>
     </div>
 </template>
 
 <script>
     export default {
         name: "Pagination",
+        props:['pageNo','pageSize','total','continues'],
+        mounted() {
+            console.log()
+        },
+        computed:{
+            totalPage() {
+                return Math.ceil(this.total/this.pageSize);
+            },
+            //计算分页器中间连续部分的起始与结束位置
+            startNumAndEndNum() {
+                const {continues,pageNo,totalPage} = this;
+                //定义两个数字存储起始数字与结束数字
+                let start = 0, end = 0;
+                //分页器中间连续部分一般为奇数，我们计算除去中间一个数字，分页器一半的大小
+                let half = (continues - 1) / 2;
+                //总页数都凑不齐中间连续的数量
+                if(totalPage <= continues) {
+                    start = 1;
+                    end = totalPage;
+                }else {//总页数比中间连续的数量多
+                    if((pageNo + half) >= totalPage) {//如果分页器最后一页超过总数，把end设置为totalPage
+                        end = totalPage;
+                        start = totalPage - continues + 1;
+                    }else if(pageNo - half <= 1) {//分页器第一页小于1，把start设置为1
+                        start = 1;
+                        end = continues;
+                    }else {//第一页和最后一页在正常范围（1-totalPage）内
+                        start = pageNo - half;
+                        end = pageNo + half;
+                    }
+                }
+                return {start, end};
+            }
+        },
     }
 </script>
 

@@ -111,7 +111,7 @@
               </li>
             </ul>
           </div>
-          <Pagination />
+          <Pagination :pageNo="1" :pageSize="5" :total="91" :continues="5"/>
         </div>
       </div>
     </div>
@@ -141,7 +141,7 @@ export default {
         //分页器当前页数
         pageNo: 1,
         //每页呈现几个产品
-        pageSize: 10,
+        pageSize: 3,
         //平台售卖属性相关参数（面包屑下面的表格呈现的属性）
         props: [],
         //代表哪个品牌
