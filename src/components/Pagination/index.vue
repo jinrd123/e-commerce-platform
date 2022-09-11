@@ -2,16 +2,16 @@
     <div class="pagination">
         <!-- 当pageNo为1时不能点击上一页 -->
         <button :disabled="pageNo===1" @click="$emit('changePageNo',pageNo-1)">上一页</button>
-        <button v-show="startNumAndEndNum.start>1" @click="$emit('changePageNo',1)">1</button>
+        <button v-show="startNumAndEndNum.start>1" @click="$emit('changePageNo',1)" :class="{active:pageNo===1}">1</button>
         <button v-show="startNumAndEndNum.start>2">···</button>
 
         <!-- 分页器中间部分 -->
         <!-- 中间部分稳定呈现，上部分“1”和“...”和下部分的“...”和“totalPage”根据情况隐藏 -->
-        <button v-for="(page,index) in startNumAndEndNum.end" :key="index" v-if="page>=startNumAndEndNum.start" @click="$emit('changePageNo',page)">{{page}}</button>
+        <button v-for="(page,index) in startNumAndEndNum.end" :key="index" v-if="page>=startNumAndEndNum.start" @click="$emit('changePageNo',page)" :class="{active:pageNo===page}">{{page}}</button>
 
 
         <button v-show="startNumAndEndNum.end<totalPage-1">···</button>
-        <button v-show="startNumAndEndNum.end<totalPage" @click="$emit('changePageNo',totalPage)">{{totalPage}}</button>
+        <button v-show="startNumAndEndNum.end<totalPage" @click="$emit('changePageNo',totalPage)" :class="{active:pageNo===totalPage}">{{totalPage}}</button>
         <button :disabled="pageNo===totalPage" @click="$emit('changePageNo',pageNo+1)">下一页</button>
 
         <button style="margin-left: 30px">共 {{totalPage}} 条</button>
@@ -90,6 +90,9 @@
                 background-color: #409eff;
                 color: #fff;
             }
+        }
+        .active {
+            background: skyblue;
         }
     }
 </style>
