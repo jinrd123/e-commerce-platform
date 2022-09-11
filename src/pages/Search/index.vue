@@ -111,7 +111,7 @@
               </li>
             </ul>
           </div>
-          <Pagination :pageNo="1" :pageSize="5" :total="91" :continues="5"/>
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="7" @changePageNo="changePageNo"/>
         </div>
       </div>
     </div>
@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters,mapState } from "vuex";
 import SearchSelector from "./SearchSelector";
 export default {
   name: "Search",
@@ -139,9 +139,9 @@ export default {
         //排序功能相关参数，1代表综合，2代表价格；desc代表降序，asc代表升序
         order: "1:desc",
         //分页器当前页数
-        pageNo: 1,
+        pageNo: 2,
         //每页呈现几个产品
-        pageSize: 3,
+        pageSize: 10,
         //平台售卖属性相关参数（面包屑下面的表格呈现的属性）
         props: [],
         //代表哪个品牌
@@ -149,7 +149,6 @@ export default {
       },
     };
   },
-  mounted() {},
   computed: {
     ...mapGetters(["goodsList"]),
     isOne() {
@@ -164,6 +163,10 @@ export default {
     isDesc() {
       return this.searchParams.order.indexOf("desc") !== -1;
     },
+    //拿到服务器中的数据总数total
+    ...mapState({
+      total:state=>state.search.searchList.total,
+    })
   },
   methods: {
     getData() {
@@ -221,6 +224,11 @@ export default {
       }
       this.getData();
     },
+    //分页器信息修改的回调函数
+    changePageNo(newPageNo) {
+      this.searchParams.pageNo = newPageNo;
+      this.getData();
+    }
   },
   watch: {
     $route: {
