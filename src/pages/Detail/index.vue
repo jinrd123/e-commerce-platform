@@ -16,15 +16,15 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom :skuImageList="skuImageList"/>
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList :skuImageList="skuImageList"/>
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
           <div class="goodsDetail">
             <h3 class="InfoName">
-              {{skuInfo.skuDesc}}
+              {{skuInfo.skuName}}
             </h3>
             <p class="news">
               {{skuInfo.skuDesc}}
@@ -360,6 +360,9 @@ export default {
   },
   computed:{
     ...mapGetters(['categoryView','skuInfo']),
+    skuImageList() {
+      return this.skuInfo.skuImageList||[];
+    }
   }
 };
 </script>

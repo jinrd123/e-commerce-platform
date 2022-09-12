@@ -1,9 +1,11 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
+    <!-- 左上大图 -->
+    <img :src="imgObj.imgUrl" />
     <div class="event"></div>
     <div class="big">
-      <img src="../images/s1.png" />
+      <!-- 放大镜里的图片，和左上大图一样 -->
+      <img :src="imgObj.imgUrl" />
     </div>
     <div class="mask"></div>
   </div>
@@ -12,6 +14,12 @@
 <script>
   export default {
     name: "Zoom",
+    props:['skuImageList'],
+    computed:{
+      imgObj() {
+        return this.skuImageList[0]||{};
+      }
+    }
   }
 </script>
 
