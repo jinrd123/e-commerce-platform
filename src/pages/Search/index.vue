@@ -75,9 +75,8 @@
               <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+                    <!-- 路由跳转时携带params参数 -->
+                    <router-link :to="`/detail/${good.id}`"><img :src="good.defaultImg" /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -111,7 +110,13 @@
               </li>
             </ul>
           </div>
-          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="7" @changePageNo="changePageNo"/>
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="7"
+            @changePageNo="changePageNo"
+          />
         </div>
       </div>
     </div>
@@ -119,7 +124,7 @@
 </template>
 
 <script>
-import { mapGetters,mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector";
 export default {
   name: "Search",
@@ -165,8 +170,8 @@ export default {
     },
     //拿到服务器中的数据总数total
     ...mapState({
-      total:state=>state.search.searchList.total,
-    })
+      total: (state) => state.search.searchList.total,
+    }),
   },
   methods: {
     getData() {
@@ -228,7 +233,7 @@ export default {
     changePageNo(newPageNo) {
       this.searchParams.pageNo = newPageNo;
       this.getData();
-    }
+    },
   },
   watch: {
     $route: {
