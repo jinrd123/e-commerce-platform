@@ -77,7 +77,7 @@
               <div class="choosed"></div>
               <dl v-for="spuSaleAttr in spuSaleAttrList" :key="spuSaleAttr.id">
                 <dt class="title">{{spuSaleAttr.saleAttrName}}</dt>
-                <dd changepirce="0" :class="{active:spuSaleAttrValue.isChecked==1}" v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList" :key="spuSaleAttrValue.id">{{spuSaleAttrValue.saleAttrValueName}}</dd>
+                <dd changepirce="0" :class="{active:spuSaleAttrValue.isChecked==1}" v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList" :key="spuSaleAttrValue.id" @click="changeActive(spuSaleAttrValue, spuSaleAttr.spuSaleAttrValueList)">{{spuSaleAttrValue.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -342,6 +342,15 @@ export default {
     ...mapGetters(['categoryView','skuInfo','spuSaleAttrList']),
     skuImageList() {
       return this.skuInfo.skuImageList||[];
+    }
+  },
+  methods: {
+    changeActive(saleAttrValue, arr) {
+      arr.forEach(item => {
+        item.isChecked = 0;
+      });
+      //点击的那个售卖属性值
+      saleAttrValue.isChecked = 1;
     }
   }
 };
