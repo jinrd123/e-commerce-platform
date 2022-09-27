@@ -87,7 +87,7 @@
                 <a href="javascript:" class="mins" @click="skuNum>1&&skuNum--">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addShopcar">加入购物车</a>
               </div>
             </div>
           </div>
@@ -370,6 +370,14 @@ export default {
         this.skuNum = parseInt(value);
       }
     },
+    //加入购物车的回调函数
+    async addShopcar() {
+      try {
+        await this.$store.dispatch('addOrUpdateShopCart', {skuId:this.$route.params.skuid,skuNum:this.skuNum})
+      } catch(error) {
+        alert("加入购物车失败");
+      }
+    }
   }
 };
 </script>

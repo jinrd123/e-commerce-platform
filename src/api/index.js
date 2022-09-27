@@ -31,3 +31,6 @@ export const reqGetSearchInfo_mock = (params) => mockRequest({
 })
 //获取商品详情信息
 export const reqGoodsInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 'get' });
+
+//将产品添加到购物车中（或者更新一个产品的个数）
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({url: `/cart/addToCart/${skuId}/${skuNum}`, method:"post"});

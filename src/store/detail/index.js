@@ -1,4 +1,4 @@
-import { reqGoodsInfo } from "@/api";
+import { reqGoodsInfo, reqAddOrUpdateShopCart } from "@/api";
 const state = {
     goodInfo: {},
 };
@@ -14,6 +14,11 @@ const actions = {
         if (result.code === 200) {
             commit("GETGOODINFO", result.data);
         }
+    },
+    async addOrUpdateShopCart({commit}, {skuId,skuNum}) {
+        //加入购物车返回的结果
+        let result = await reqAddOrUpdateShopCart(skuId, skuNum);
+        //加入购物车是我们前台带着参数通知服务器的操作，服务器返回的数据里也没有data项，所以我们自然也不用vuex3连环存储数据
     }
 };
 const getters = {
