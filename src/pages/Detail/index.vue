@@ -375,7 +375,9 @@ export default {
       try {
         await this.$store.dispatch('addOrUpdateShopCart', {skuId:this.$route.params.skuid,skuNum:this.skuNum})
         //进行路由跳转
-        this.$router.push({name:'addcartsuccess'});
+        //利用sessionStorage存放商品信息供购物车组件使用
+        sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo));
+        this.$router.push({name:'addcartsuccess', query:{skuNum:this.skuNum}});
       } catch(error) {
         alert("加入购物车失败");
       }
