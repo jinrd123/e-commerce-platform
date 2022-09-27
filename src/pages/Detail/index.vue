@@ -374,6 +374,8 @@ export default {
     async addShopcar() {
       try {
         await this.$store.dispatch('addOrUpdateShopCart', {skuId:this.$route.params.skuid,skuNum:this.skuNum})
+        //进行路由跳转
+        this.$router.push({name:'addcartsuccess'});
       } catch(error) {
         alert("加入购物车失败");
       }
