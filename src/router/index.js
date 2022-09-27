@@ -9,6 +9,7 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess';
+import ShopCart from '@/pages/ShopCart';
 
 //先把VueRouter原型对象的push方法的函数体保存一份
 let originPush = VueRouter.prototype.push;
@@ -36,6 +37,13 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 //配置路由
 export default new VueRouter({
     routes: [
+        {
+            path: "/shopcart",
+            component: ShopCart,
+            meta: {
+                show: true,
+            },
+        },
         {
             path: "/addcartsuccess",
             name: 'addcartsuccess',
