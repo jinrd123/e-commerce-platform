@@ -82,9 +82,9 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"/>
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a href="javascript:" class="mins" @click="skuNum>1&&skuNum--">-</a>
               </div>
               <div class="add">
                 <a href="javascript:">加入购物车</a>
@@ -335,6 +335,11 @@ export default {
     ImageList,
     Zoom,
   },
+  data() {
+    return {
+      skuNum: 1,
+    }
+  },
   mounted() {
     this.$store.dispatch("getGoodInfo", this.$route.params.skuid);
   },
@@ -345,13 +350,26 @@ export default {
     }
   },
   methods: {
+    //产品售卖属性切换高亮
     changeActive(saleAttrValue, arr) {
       arr.forEach(item => {
         item.isChecked = 0;
       });
       //点击的那个售卖属性值
       saleAttrValue.isChecked = 1;
-    }
+    },
+    //表单元素通过输入修改产品个数
+    changeSkuNum(event) {
+      //用户输入进来的文本*1，不影响正常数量，但如果输入非数字，会得到NaN
+      let value = event.target.value * 1;
+      //如果用户输入非法---出现nan或者小于1
+      if(isNaN(value) || value < 1) {
+        this.skuNum = 1;
+      }else {
+        //如果是正常数字且大于一，转换成整数即可
+        this.skuNum = parseInt(value);
+      }
+    },
   }
 };
 </script>
