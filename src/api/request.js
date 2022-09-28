@@ -2,6 +2,8 @@
 import axios from "axios";
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
+//在当前模块中引入store
+import store from '@/store';
 
 //1.利用axios对象的方法create创建一个axios实例，而且我们create一个axios实例的时候可以进行配置
 const requests = axios.create({
@@ -15,6 +17,10 @@ const requests = axios.create({
 requests.interceptors.request.use((config)=>{
     nprogress.start();
     //config:配置对象，对象里面有一个属性很重要：headers--请求头
+    if(store.state.detail.uuid_token) {
+        //给请求头添加一个字段（userTempId）
+        config.headers.userTempId = store.state.detail.uuid_token;
+    }
     return config;
 });
 
