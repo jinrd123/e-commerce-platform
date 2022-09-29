@@ -32,7 +32,20 @@ const actions = {
         }else {
             return Promise.reject(new Error("fail"));
         }
-    }
+    },
+    //删除全部勾选的产品
+    deleteAllCheckedCart({dispatch, getters}) {
+        //context:小仓库  commit：提交给mutations  getters：计算属性  dispatch：派发actions  state：当前仓库数据
+        let PromiseAll = [];
+        getters.cartList.cartInfoList.forEach(item => {
+            if(item.isChecked == 1) {
+                let promise = dispatch('deleteCartListBySkuId', item.skuId);
+                PromiseAll.push(promise);
+                console.log("删除了一个")
+            }
+        });
+        return Promise.all(PromiseAll);
+    },
 };
 const getters = {
     cartList(state) {
