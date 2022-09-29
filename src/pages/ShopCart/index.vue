@@ -64,7 +64,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isAllCheck" />
+        <input class="chooseAll" type="checkbox" :checked="cartInfoList.length>0&&isAllCheck" @change="checkAll($event)" :disabled="cartInfoList.length<=0"/>
         <span>全选</span>
       </div>
       <div class="option">
@@ -166,6 +166,16 @@ export default {
         alert('@@@');
       }
     },
+    async checkAll(event) {
+      try {
+        //全选按钮目前的状态
+        let currentState = event.target.checked;
+        await this.$store.dispatch('checkAll', currentState);
+        this.getData();
+      } catch(error) {
+        alert("全选失败");
+      }
+    }
   },
   computed: {
     ...mapGetters(["cartList"]),

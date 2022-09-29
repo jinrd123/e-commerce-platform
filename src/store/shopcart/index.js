@@ -46,6 +46,17 @@ const actions = {
         });
         return Promise.all(PromiseAll);
     },
+    //点击全选的函数（全选或者全不选）
+    checkAll({dispatch, getters}, currentState) {
+        let PromiseAll = [];
+        //带给服务器的参数是0|1，而不是布尔值，需要转换
+        let params = currentState ? '1' : '0';
+        getters.cartList.cartInfoList.forEach(item => {
+            let promise = dispatch('updateCheckedById', {skuId:item.skuId, isChecked:params});
+            PromiseAll.push(promise);
+        })
+        return Promise.all(PromiseAll);
+    }
 };
 const getters = {
     cartList(state) {
