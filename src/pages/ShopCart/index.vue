@@ -87,6 +87,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import throttle from "lodash/throttle.js";
 export default {
   name: "ShopCart",
   mounted() {
@@ -97,7 +98,7 @@ export default {
     getData() {
       this.$store.dispatch("getCartList");
     },
-    async handler(type, disNum, cart) {
+    handler:throttle(async function(type, disNum, cart) {
       //type用来区分触发事件的三个元素
       //disNum形参——+:变化量为1;-:变化量为-1;input:最终的个数（不是变化量）
       //cart:哪一个产品（身上有id属性）
@@ -132,7 +133,7 @@ export default {
         //如果修改成功下面获取服务器最新数据进行展示
         this.getData();
       } catch (error) {}
-    },
+    },1000),
     async deleteCartById(cart) {
       try {
         await this.$store.dispatch('deleteCartListBySkuId', cart.skuId);
