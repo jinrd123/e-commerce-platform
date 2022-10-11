@@ -8,32 +8,32 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号">
+        <input type="text" placeholder="请输入你的手机号" v-model="phone">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码">
-        <img ref="code" src="http://182.92.128.115/api/user/passport/code" alt="code">
+        <input type="text" placeholder="请输入验证码" v-model="code">
+        <button style="width:100px;height:38px" @click="getCode">获取验证码</button>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
+        <input type="text" placeholder="请输入你的登录密码" v-model="password">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
+        <input type="text" placeholder="请输入确认密码" v-model="password1">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox">
+        <input name="m1" type="checkbox" v-model="agree">
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="userRegister">完成注册</button>
       </div>
     </div>
 
@@ -58,7 +58,51 @@
 
 <script>
   export default {
-    name: 'Register'
+    name: 'Register',
+    data() {
+      //收集表单数据
+      return {
+        //手机号
+        phone: '',
+        //验证码
+        code: '',
+        //密码
+        password: '',
+        //确认密码
+        password1: '',
+        //是否勾选同意按钮
+        agree: false
+      }
+    },
+    methods: {
+      async getCode() {
+        try {
+          //有手机号我们才发请求
+          const { phone } = this;
+          phone && (await this.$store.dispatch('getCode',this.phone));
+          //我们直接替用户把验证码填写了
+          this.code = this.$store.state.user.code;
+        }catch(err) {
+          alert(err.message);
+        }
+      },
+      //用户注册按钮
+      async userRegister() {
+        const { phone, code, password, password1 } = this;
+        try {
+          if(phone&&code&& password==password1) {
+            await this.$store.dispatch('userRegister',{phone, code, password});
+            //如果注册成功,进行路由跳转,跳转到登陆页面
+            this.$router.push('/login');
+          }else {
+            alert("请填写相关信息");
+          }
+        } catch(err) {
+          alert('注册失败'+err.message);
+          console.log("捕获到错误了")
+        }
+      }
+    },
   }
 </script>
 
