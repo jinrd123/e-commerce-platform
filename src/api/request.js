@@ -21,6 +21,10 @@ requests.interceptors.request.use((config)=>{
         //给请求头添加一个字段（userTempId）
         config.headers.userTempId = store.state.detail.uuid_token;
     }
+    //携带token
+    if(localStorage.getItem('TOKEN')) {
+        config.headers.token = localStorage.getItem('TOKEN');
+    }
     return config;
 });
 

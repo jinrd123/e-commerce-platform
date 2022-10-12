@@ -30,6 +30,8 @@ export default {
     },
     mounted() {
         this.$store.dispatch('getFloorList');
+        //登陆后获取用户信息
+        this.$store.dispatch("getUserInfo");
     },
     computed: {
         ...mapState({floorList:(state)=>{

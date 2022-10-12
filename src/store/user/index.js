@@ -1,8 +1,9 @@
 //登陆与注册的模块
-import { reqGetCode, reqUserLogin, reqUserRegister } from "@/api";
+import { reqGetCode, reqUserLogin, reqUserRegister, reqUserInfo } from "@/api";
 const state = {
     code: '',
-    token: '',
+    token: localStorage.getItem('token'),
+    userInfo: {},
 };
 const mutations = {
     GETCODE(state, code) {
@@ -10,6 +11,9 @@ const mutations = {
     },
     USERLOGIN(state, token) {
         state.token = token;
+    },
+    GETUSERINFO(state, userInfo) {
+        state.userInfo = userInfo;
     }
 };
 const actions = {
@@ -39,11 +43,25 @@ const actions = {
         let result = await reqUserLogin(data);
         if(result.code === 200) {
             commit('USERLOGIN', result.data.token);
+            //本地存储token
+            localStorage.setItem("TOKEN", result.data.token);
             return 'ok';
         }else {
             return Promise.reject(new Error('fail'));
         }
     },
+    //登陆后获取用户信息
+    async getUserInfo({commit}) {
+        let result = await reqUserInfo();
+        console.log(result);
+        if(result.code == 200) {
+            //提交用户信息
+            commit('GETUSERINFO', result.data);
+            return 'ok';
+        }else {
+            //return Promise.reject(new Error('fail'));
+        }
+    }
 };
 const getters = {};
 export default {
