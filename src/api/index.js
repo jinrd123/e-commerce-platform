@@ -55,3 +55,6 @@ export const reqUserLogin = (data) => requests({url:'/user/passport/login', data
 
 //登录之后（请求不需要参数，token在请求头中携带）获取用户的信息
 export const reqUserInfo = () => requests({url:'/user/passport/auth/getUserInfo', method:'get'});
+
+//退出登录
+export const reqLogout = () => requests({url:'/user/passport/logout', methode:'get'});

@@ -1,5 +1,5 @@
 //登陆与注册的模块
-import { reqGetCode, reqUserLogin, reqUserRegister, reqUserInfo } from "@/api";
+import { reqGetCode, reqUserLogin, reqUserRegister, reqUserInfo, reqLogout } from "@/api";
 const state = {
     code: '',
     token: localStorage.getItem('token'),
@@ -14,6 +14,12 @@ const mutations = {
     },
     GETUSERINFO(state, userInfo) {
         state.userInfo = userInfo;
+    },
+    //清除vuex以及本地存储的登录数据
+    CLEAR(state) {
+        state.token = '';
+        state.userInfo = {};
+        localStorage.removeItem("TOKEN");
     }
 };
 const actions = {
@@ -60,6 +66,16 @@ const actions = {
             return 'ok';
         }else {
             //return Promise.reject(new Error('fail'));
+        }
+    },
+    //退出登录
+    async userLogout({commit}) {
+        let result = await reqLogout();
+        if(result.code == 200) {
+            commit("CLEAR");
+            return 'ok';
+        }else {
+            return Promise.reject(new Error("fail"));
         }
     }
 };
