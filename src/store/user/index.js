@@ -65,7 +65,7 @@ const actions = {
             commit('GETUSERINFO', result.data);
             return 'ok';
         }else {
-            //return Promise.reject(new Error('fail'));
+            return Promise.reject(new Error('fail'));
         }
     },
     //退出登录

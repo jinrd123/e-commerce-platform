@@ -35,7 +35,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 }
 
 //配置路由
-export default new VueRouter({
+let router = new VueRouter({
     routes: [
         {
             path: "/shopcart",
@@ -100,3 +100,39 @@ export default new VueRouter({
     }
 })
 //路由配置完，相当于一个文件模块，我们需要去入口文件里给Vue实例使用
+
+import store from '@/store';
+//全局路由守卫：前置守卫（在路由转跳之前执行逻辑）
+router.beforeEach(async (to, from, next) => {
+    let token = localStorage.getItem("TOKEN");
+    //根据userInfo的一个属性来判断目前是否有用户信息（userInfo保底为空对象，if判断恒为真）
+    let name = store.state.user.userInfo.name;
+    if(token) {//如果已经登录
+        //去登陆页面就重定向到home页面
+        if(to.path == '/login') {
+            next('/home');
+        }else {//登录状态下去的页面不是login，而是其它页面，这里需要处理的逻辑是：获取用户信息
+            //有用户信息直接转跳；没用户信息先获取用户信息再转跳
+            if(name) {
+                next();
+            }else {
+                try{
+                    await store.dispatch('getUserInfo');
+                    next();
+                } catch(error) {
+                    //登录状态下，没有用户名，然后我们捞取用户名，捞取失败的可能情况：token过期了
+                    //token失效了，获取不到用户信息：清除token，重新登录
+                    await store.dispatch('userLogout');
+                    next('/login');
+                }
+            }
+        }
+    }else {//如果没有登陆
+
+        //未登录的相关逻辑还没有处理
+        
+        next();
+    }
+})
+
+export default router;
