@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Header />
+    <!-- 路由配置配置的就是这里具体呈现什么 -->
     <router-view></router-view>
     <Footer v-show="$route.meta.show"></Footer>
   </div>
