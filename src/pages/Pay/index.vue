@@ -65,7 +65,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click="open">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { MessageBox } from 'element-ui';
   export default {
     name: 'Pay',
     data() {
@@ -104,6 +105,21 @@
         if(result.code == 200) {
           this.payInfo = result.data;
         }
+      },
+      open() {
+        MessageBox.alert('<strong>这是 <i>HTML</i> 片段</strong>', 'HTML 片段', {
+          dangerouslyUseHTMLString: true,
+          //中间布局
+          center:true,
+          //是否显示取消按钮
+          showCancelButton:true,
+          //取消按钮的文本内容
+          cancelButtonText:'支付遇见问题',
+          //确认按钮的文本
+          confirmButtonText:'已支付成功',
+          //右上角的叉号没了
+          showClose:false,
+        });
       }
     }
   }
