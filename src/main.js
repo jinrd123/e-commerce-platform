@@ -18,14 +18,14 @@ Vue.component(Carousel.name, Carousel);
 Vue.component(Pagination.name,Pagination);
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
-// //测试请求是否发送成功
-// import {reqCategoryList} from '@/api';
-// reqCategoryList();
+//引入接口文件夹里面的全部请求函数
+import * as API from '@/api';
 new Vue({
   router,
   store,
   beforeMount() {
     Vue.prototype.$bus = this;
+    Vue.prototype.$API = API;
   },
   render: h => h(App),
 }).$mount('#app')

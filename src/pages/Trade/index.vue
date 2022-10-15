@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -110,11 +110,34 @@ import {mapState} from 'vuex';
         //排他操作
         addressInfo.forEach(item=>item.isDefault=0);
         address.isDefault = 1;
+      },
+      //提交订单的回调
+      async submitOrder() {
+        //query参数：交易编码
+        let { tradeNo } = this.orderInfo;
+        //其余六个params参数
+        let data = {
+          consignee: this.userDefaultAddress.consignee,//最终收件人的名字
+          consigneeTel: this.userDefaultAddress.phoneNum,//收件人手机号
+          deliveryAddress: this.userDefaultAddress.fullAddress,//收件人地址
+          paymentWay: "ONLINE",//支付方式
+          orderComment: this.msg,//买家留言
+          orderDetailList: this.orderInfo.detailArrayList,//商品清单
+        }
+        let result = await this.$API.reqSubmitOrder(tradeNo,data);
+        if(result.code == 200) {//订单提交成功
+          this.orderId = result.data;
+          //携带订单编号跳转至支付成功页面
+          this.$router.push('/pay?orderId='+this.orderId);
+        }else {
+          alert(result.message);
+        }
       }
     },
     data() {
       return {
         msg: '',
+        orderId: '',
       }
     }
   }
