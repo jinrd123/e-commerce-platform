@@ -135,12 +135,12 @@ import QRCode from 'qrcode';
               //关闭弹出框
               done();
             }else {//用户点击了“已支付成功”
-              if(this.code == 200) {
+              //if(this.code == 200) {
                 clearInterval(this.timer);
                 this.timer = null;
                 done();
                 this.$router.push('/paysuccess');
-              }
+              //}
             }
           }
         });
