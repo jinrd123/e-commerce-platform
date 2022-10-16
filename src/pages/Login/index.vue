@@ -81,7 +81,10 @@
           if( phone && password ) {
             await this.$store.dispatch('userLogin', {phone, password});
             //登录成功后转跳至主页
-            this.$router.push('/home');
+            //看当前路由中是否含有query参数，有的话说明是去其它一些不登陆不能访问的页面转跳过来登录页面的，所以就直接跳到原本想去的路由
+            //没有query参数直接跳到home路由即可
+            let toPath = this.$route.query.redirect || "/home";
+            this.$router.push(toPath);
           }
         }catch(error) {
           alert(error.message);

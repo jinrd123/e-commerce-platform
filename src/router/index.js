@@ -177,10 +177,16 @@ router.beforeEach(async (to, from, next) => {
             }
         }
     }else {//如果没有登陆
-
-        //未登录的相关逻辑还没有处理
-        
-        next();
+        //未登录：不能去交易相关组件（trade）、支付相关组件（pay|paysuccess）、个人中心组件（center）
+        //未登录时转跳如上路由时重新定位至登录组件（"/login"）
+        //我们给login传递一个query参数用来记录我们原本想去的页面
+        let toPath = to.path;
+        if(toPath.indexOf("/trade") != -1 || toPath.indexOf("/pay") != -1 || toPath.indexOf("/center") != -1) {
+            next('/login?redirect=' + toPath)
+        }else {
+            //去的不是上面这些路由（home|search|shopCart）,直接放行
+            next();
+        }
     }
 })
 
