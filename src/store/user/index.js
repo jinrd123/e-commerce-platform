@@ -59,7 +59,6 @@ const actions = {
     //登陆后获取用户信息
     async getUserInfo({commit}) {
         let result = await reqUserInfo();
-        console.log(result);
         if(result.code == 200) {
             //提交用户信息
             commit('GETUSERINFO', result.data);
