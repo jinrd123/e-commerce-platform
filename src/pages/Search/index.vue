@@ -76,7 +76,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <!-- 路由跳转时携带params参数 -->
-                    <router-link :to="`/detail/${good.id}`"><img :src="good.defaultImg" /></router-link>
+                    <router-link :to="`/detail/${good.id}`"><img v-lazy="good.defaultImg" /></router-link>
                   </div>
                   <div class="price">
                     <strong>

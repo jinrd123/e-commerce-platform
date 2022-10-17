@@ -20,6 +20,12 @@ Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 //引入接口文件夹里面的全部请求函数
 import * as API from '@/api';
+//图片懒加载用图
+import lazyPicture from "@/assets/images/lazyLoad.webp";
+import VueLazyload from "vue-lazyload";
+Vue.use(VueLazyload,{
+  loading: lazyPicture,
+})
 new Vue({
   router,
   store,
