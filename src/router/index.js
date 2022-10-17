@@ -78,6 +78,13 @@ let router = new VueRouter({
             meta: {
                 show: true,
             },
+            beforeEnter: (to, from, next) => {
+                if(from.path == "/trade") {
+                    next();
+                }else {
+                    next(false);
+                }
+            }
         },
         {
             path: "/trade",
@@ -85,6 +92,15 @@ let router = new VueRouter({
             meta: {
                 show: true,
             },
+            beforeEnter: (to, from, next) => {
+                //"/trade"路由必须由"/shopcart"而来才能访问
+                if(from.path == "/shopcart") {
+                    next();
+                }else {
+                    //next(false):终止本次路由转跳，停留在from对应的路由(从哪来就原地不动)
+                    next(false);
+                }
+            }
         },
         {
             path: "/shopcart",
